@@ -18,8 +18,8 @@ export const leadership = [
     position: "Vice President", 
     image: "/rahul_lenka.png",
     social: {
-      instagram: "#",
-      linkedin: "#",
+      instagram: "www.instagram.com/rahulllll.8",
+      linkedin: "https://www.linkedin.com/in/rahul-lenka-3b7018238/",
       github: "#",
     }
   },
@@ -89,8 +89,8 @@ export const domains = {
         name: "Kaushik Verma",
         image: "/WEB_Kaushik_Verma.jpg",
         social: {
-          instagram: "#",
-          linkedin: "https://www.linkedin.com/in/kaushik-verma-2b5515254/",
+          instagram: "https://www.instagram.com/kaushikverma.me",
+          linkedin: "https://www.linkedin.com/in/kaushikverma",
           github: "https://github.com/kaushik-2318/",
         },
       },
@@ -100,6 +100,15 @@ export const domains = {
         social: {
           instagram: "#",
           linkedin: "https://www.linkedin.com/in/archi-shaw-279a34277",
+          github: "#",
+        },
+      },
+      {
+        name: "Yash Raj Singh",
+        image: "/WEB_Yash_Raj_Singh.jpg",
+        social: {
+          instagram: "#",
+          linkedin: "https://www.linkedin.com/in/yash-raj-singh-b48756256/",
           github: "#",
         },
       },
@@ -208,6 +217,15 @@ export const domains = {
     },
     members: [
       {
+        name: "Mihir Raj",
+        image: "/APP_Mihir_Raj.jpg",
+        social: {
+          instagram: "https://www.instagram.com/_mihir.h/",
+          linkedin: "https://www.linkedin.com/in/raj-mihir/",
+          github: "#",
+        },
+      },
+      {
         name: "Ritam Patra",
         image: "/APP_Ritam_Patra.jpg",
         social: {
@@ -216,9 +234,18 @@ export const domains = {
           github: "https://github.com/RitamPatra",
         },
       },
+      {
+        name: "Vivek Fatwani",
+        image: "/APP_Vivek_Fatwani.jpg",
+        social: {
+          instagram: "https://www.instagram.com/vivekforsure_",
+          linkedin: "https://www.linkedin.com/in/vivek-fatwani",
+          github: "#",
+        },
+      },
     ],
   },
-  Cybersecurity: {
+  "Cybersecurity": {
     icon: Shield,
     color: "from-[#fa5935] to-[#8d0e0e]",
     lead: {
@@ -254,7 +281,7 @@ export const domains = {
         name: "Arin Srivastava",
         image: "/CYBER_Arin_Srivastava.jpg",
         social: {
-          instagram: "https://www.instagram.com/arrinnn.",
+          instagram: "https://www.instagram.com/_arrinnn._",
           linkedin: "https://www.linkedin.com/in/arin-srivastava-672947309",
           github: "#",
         },
@@ -263,7 +290,7 @@ export const domains = {
         name: "Ishan Gupta",
         image: "/CYBER_Ishan_Gupta.jpg",
         social: {
-          instagram: "#",
+          instagram: "https://www.instagram.com/ishangupta294/",
           linkedin: "https://www.linkedin.com/in/ishan-gupta-962a07285/",
           github: "https://github.com/CoderIshanGupta",
         },
@@ -289,7 +316,7 @@ export const domains = {
       social: {
         instagram: "#",
         linkedin: "https://www.linkedin.com/in/krrishchopra7",
-        github: "#",
+        github: "https://github.com/krrishchopra7",
       },
     },
     members: [
@@ -297,9 +324,18 @@ export const domains = {
         name: "Anusuya Srivastava",
         image: "/DESIGN_Anusuya_Srivastava.jpg",
         social: {
-          instagram: "#",
+          instagram: "https://www.instagram.com/anusuyyyaa/",
           linkedin: "https://www.linkedin.com/in/anusuyasrivastava",
           github: "https://github.com/anusuyasri",
+        },
+      },
+      {
+        name: "Ashwika Srivastava",
+        image: "/DESIGN_Ashwika_Srivastava.jpg",
+        social: {
+          instagram: "#",
+          linkedin: "www.linkedin.com/in/srivastavaashwika",
+          github: "https://github.com/srivastavashwika",
         },
       },
       {
@@ -307,7 +343,7 @@ export const domains = {
         image: "/DESIGN_Rupali_Pasa.jpg",
         social: {
           instagram: "https://www.instagram.com/rupalipasa/",
-          linkedin: "https://www.linkedin.com/in/rupali-pasa-118a44365/",
+          linkedin: "https://www.linkedin.com/in/rupali-pasa-118a44365",
           github: "#",
         },
       },
@@ -352,6 +388,33 @@ export const domains = {
           instagram: "https://www.instagram.com/arka_routh",
           linkedin: "https://www.linkedin.com/in/arka-routh-6b9aba343",
           github: "#",
+        },
+      },
+      {
+        name: "Arya Roy",
+        image: "/CP_Arya_Roy.jpg",
+        social: {
+          instagram: "#",
+          linkedin: "https://www.linkedin.com/in/arya-roy-06a608285/",
+          github: "https://github.com/AryaRoy2005",
+        },
+      },
+      {
+        name: "Avni Anand",
+        image: "/CP_Avni_Anand.jpg",
+        social: {
+          instagram: "#",
+          linkedin: "#",
+          github: "#",
+        },
+      },
+      {
+        name: "Gorangi Malik",
+        image: "/CP_Gorangi_Malik.jpg",
+        social: {
+          instagram: "#",
+          linkedin: "https://www.linkedin.com/in/gorangi-malik-bb3229322/",
+          github: "https://github.com/Gorangi143",
         },
       },
       {
@@ -428,7 +491,7 @@ export const domains = {
         name: "Sourish Dey",
         image: "/CLOUD_Sourish_Dey.jpg",
         social: {
-          instagram: "#",
+          instagram: "https://www.instagram.com/sourish_dey_/",
           linkedin: "https://www.linkedin.com/in/sourish-dey-20b170206",
           github: "#",
         },
@@ -439,16 +502,25 @@ export const domains = {
     icon: Smartphone,
     color: "from-[#FF8820] to-[#8d0e0e]",
     lead: {
-      name: "Keshav",
+      name: "Ayush Lohia",
       role: "LEAD",
-      image: "/demo.png",
+      image: "/MARKETING_Ayush_Lohia.png",
       social: {
         instagram: "#",
-        linkedin: "#",
-        github: "#",
+        linkedin: "https://linkedin.com/in/ayushlohia15704/",
+        github: "https://github.com/arMOULD560",
       },
     },
     members: [
+      {
+        name: "Akshat Singh",
+        image: "/MARKETING_Akshat_Singh.jpg",
+        social: {
+          instagram: "https://www.instagram.com/akshat_6353/",
+          linkedin: "https://www.linkedin.com/in/akshat-singh-65b190320",
+          github: "#",
+        },
+      },
       {
         name: "Mayank Malik",
         image: "/MARKETING_Mayank_Malik.jpeg",
@@ -487,7 +559,7 @@ export const domains = {
       },
     ],
   },
-  Administration: {
+  "Administration": {
     icon: Smartphone,
     color: "from-[#FF8820] to-[#8d0e0e]",
     lead: {
@@ -525,12 +597,12 @@ export const domains = {
     icon: Smartphone,
     color: "from-[#FF8820] to-[#8d0e0e]",
     lead: {
-      name: "Arghajit",
+      name: "Arghajit Acharjee",
       role: "LEAD",
-      image: "/demo.png",
+      image: "/CONTENT_Arghajit_Acharjee.jpeg",
       social: {
-        instagram: "#",
-        linkedin: "#",
+        instagram: "https://www.instagram.com/arghajitacharya/",
+        linkedin: "https://www.linkedin.com/in/arghajitacharya/",
         github: "#",
       },
     },
