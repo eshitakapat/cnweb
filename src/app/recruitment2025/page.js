@@ -218,7 +218,7 @@ const RegistrationForm = () => {
                 value={formData.GitHubLink}
                 onChange={handleChange}
                 className="w-full text-black border border-orange-300 focus:border-[#ee6220] outline-none px-3 py-2 rounded-lg bg-white/90 shadow-sm focus:bg-orange-50 transition"
-                placeholder="Paste your GitHub profile link (अपना गिटहब लिंक पेस्ट करें)"
+                placeholder="Paste your resume link (अपना रेस्यूम लिंक पेस्ट करें)"
               />
             </div>
             <button
