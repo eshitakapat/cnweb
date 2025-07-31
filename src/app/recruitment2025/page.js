@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import Confetti from "react-confetti";
+import Link from "next/link";
 
 const RegistrationForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -69,12 +70,16 @@ const RegistrationForm = () => {
           numberOfPieces={400}
         />
       )}
-      <img
-        src="/CodingNinjas.png"
-        alt="Logo"
-        className="absolute top-4 left-4 h-auto z-20 w-[160px] sm:w-[190px] drop-shadow-xl cursor-pointer"
-        onClick={() => (window.location.href = "/")}
-      />
+      {/* Use Next.js Link for client-side navigation */}
+      <Link href="/" passHref legacyBehavior>
+        <a>
+          <img
+            src="/CodingNinjas.png"
+            alt="Logo"
+            className="absolute top-4 left-4 h-auto z-20 w-[160px] sm:w-[190px] drop-shadow-xl cursor-pointer"
+          />
+        </a>
+      </Link>
       {/* Overlay for readability */}
       <div className="absolute inset-0 bg-gradient-to-br from-black/30 via-white/10 to-orange-100/10 z-0" />
       <div className="relative z-10 flex flex-col items-center w-full md:max-w-xl max-w-xl px-2 sm:px-8 pt-16 pb-8">
@@ -94,8 +99,8 @@ const RegistrationForm = () => {
             {/* <p className="text-xs text-gray-600 mt-1">All fields are mandatory (सभी फ़ील्ड अनिवार्य हैं)</p> */}
           </div>
           <form onSubmit={handleSubmit} className="space-y-4 overflow-y-auto  sm:max-h-full">
-            {/* Name */}
-          <div>
+            {/* Roll Number */}
+            <div>
               <label className="text-[15px] block font-bold text-gray-800 mb-1">
                 Roll Number (रोल नंबर)
               </label>
@@ -109,6 +114,7 @@ const RegistrationForm = () => {
                 placeholder="Enter your roll number (अपना रोल नंबर लिखें)"
               />
             </div>
+            {/* Name */}
             <div>
               <label className="text-[15px] block font-bold text-gray-800 mb-1">
                 Name (नाम)
@@ -123,8 +129,7 @@ const RegistrationForm = () => {
                 placeholder="Enter your name (अपना नाम लिखें)"
               />
             </div>
-            {/* Roll Number */}
-           
+
             {/* Phone Number */}
             <div>
               <label className="text-[15px] block font-bold text-gray-800 mb-1">
@@ -140,7 +145,7 @@ const RegistrationForm = () => {
                 placeholder="Enter your phone number (अपना फ़ोन नंबर लिखें)"
               />
             </div>
-          {/* Email */}
+            {/* Email */}
             <div>
               <label className="text-[15px] block font-bold text-gray-800 mb-1">
                 Email (ईमेल)
@@ -172,6 +177,7 @@ const RegistrationForm = () => {
                   <option value="" disabled>
                     Select your year (अपना वर्ष चुनें)
                   </option>
+                  <option value="1st">1st (पहला)</option>
                   <option value="2nd">2nd (दूसरा)</option>
                   <option value="3rd">3rd (तीसरा)</option>
                 </select>
@@ -204,8 +210,8 @@ const RegistrationForm = () => {
                 </select>
               </div>
             </div>
-           
-            {/* GitHub URL */}
+
+            {/* GitHub URL / Resume URL */}
             <div>
               <label className="text-[15px] block font-bold text-gray-800 mb-1">
                 RESUME URL (आपका रेस्यूम यूआरएल)
