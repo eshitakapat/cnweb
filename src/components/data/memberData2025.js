@@ -565,11 +565,11 @@ export const domains = {
     lead: {
       name: "Shubham Agarwal",
       role: "LEAD",
-      image: "/demo.png",
+      image: "/ADMIN_Shubham_Agarwal.jpg",
       social: {
-        instagram: "#",
-        linkedin: "#",
-        github: "#",
+        instagram: "https://www.instagram.com/shubham2.303",
+        linkedin: "https://www.linkedin.com/in/sagarwal95",
+        github: "https://github.com/ShubhamGoodBoy",
       },
     },
     members: [
