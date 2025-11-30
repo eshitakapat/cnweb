@@ -70,4 +70,46 @@ body {
 }
 
 
+select {
+  background-color: rgba(35, 0, 53, 0.95) !important;
+  border-radius: 0.75rem !important;
+  color: #916BB1 !important;
+}
 
+select option {
+  background-color: #1a0225 !important;
+  color: #916BB1 !important;
+}
+
+select:not(:invalid) {
+  color: #916BB1 !important;
+}
+
+select:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 #e5d9ff;
+}
+
+.custom-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: #9b4dff #2a003a;
+}
+
+
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: rgba(20, 0, 40, 0.4);
+  border-radius: 10px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #c56bff, #7a1fff);
+  border-radius: 10px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #e69bff, #a24bff);
+}
