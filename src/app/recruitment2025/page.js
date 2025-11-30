@@ -1,236 +1,332 @@
-"use client";
+"use client"
+import React, { useState, useRef } from 'react'
 
-import React, { useState } from "react";
-import { Toaster, toast } from "react-hot-toast";
-import Confetti from "react-confetti";
+export default function RegisterOverlay({ onSubmit }) {
+  const [form, setForm] = useState({
+    rollNumber: '',
+    name: '',
+    phone: '',
+    email: '',
+    year: '',
+    domain: '',
+    resumeUrl: '',
+  })
+  const [errors, setErrors] = useState({})
+  const [status, setStatus] = useState(null) // null | "loading" | "success" | "error"
+  const statusRef = useRef(null)
 
-const RegistrationForm = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showConfetti, setShowConfetti] = useState(false);
-  const [formData, setFormData] = useState({
-    Name: "",
-    RollNo: "",
-    Phone: "",
-    Year: "",
-    Domain: "",
-    Email: "",
-    GitHubLink: "",
-  });
+  // Basic validators
+  const validateEmail = (v) => /^\S+@\S+\.\S+$/.test(String(v).trim())
+  const validatePhone = (v) => /^[0-9()+\-\s]{7,20}$/.test(String(v).trim())
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  function validateAll() {
+    const e = {}
+    if (!form.rollNumber.trim()) e.rollNumber = 'Roll number is required'
+    if (!form.name.trim()) e.name = 'Name is required'
+    if (!form.email.trim()) e.email = 'Email is required'
+    else if (!validateEmail(form.email)) e.email = 'Email is invalid'
+    if (!form.phone.trim()) e.phone = 'Phone is required'
+    else if (!validatePhone(form.phone)) e.phone = 'Phone is invalid'
+    if (!form.year) e.year = 'Year is required'
+    if (!form.domain) e.domain = 'Domain is required'
+    return e
+  }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  function handleChange(e) {
+    const { name, value } = e.target
+    setForm((s) => ({ ...s, [name]: value }))
+    setErrors((p) => ({ ...p, [name]: undefined }))
+  }
 
-    try {
-      await fetch(
-        "https://script.google.com/macros/s/AKfycbyUxfAXBBs_laW5goqx6qRjyfpbnNov27rAKDFpdm9O1UtiIHVPtZ0zSAZCZLv0TfZRTQ/exec",
-        {
-          method: "POST",
-          mode: "no-cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
-
-      toast.success("Registration submitted successfully!");
-      setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 3500);
-      setFormData({
-        Name: "",
-        RollNo: "",
-        Phone: "",
-        Year: "",
-        Domain: "",
-        Email: "",
-        GitHubLink: "",
-      });
-    } catch (error) {
-      toast.error("Error submitting form.");
-      console.error("Submission error:", error);
+  async function handleSubmit(e) {
+    e.preventDefault()
+    const eobj = validateAll()
+    setErrors(eobj)
+    if (Object.keys(eobj).length > 0) {
+      setStatus('error')
+      statusRef.current?.focus?.()
+      return
     }
 
-    setIsSubmitting(false);
-  };
+    setStatus('loading')
+    try {
+      if (typeof onSubmit === 'function') {
+        const result = await onSubmit({ ...form })
+        if (result && result.ok === false) {
+          setStatus('error')
+          statusRef.current?.focus?.()
+        } else {
+          setStatus('success')
+          setForm({ rollNumber: '', name: '', phone: '', email: '', year: '', domain: '', resumeUrl: '' })
+          statusRef.current?.focus?.()
+        }
+      } else {
+        // demo fallback
+        await new Promise((r) => setTimeout(r, 600))
+        setStatus('success')
+        setForm({ rollNumber: '', name: '', phone: '', email: '', year: '', domain: '', resumeUrl: '' })
+        statusRef.current?.focus?.()
+      }
+    } catch (err) {
+      console.error(err)
+      setStatus('error')
+      statusRef.current?.focus?.()
+    }
+  }
+
+  // Inline style pieces required by spec (kept inline):
+  const cardInsetShadows =
+    'inset -49.2px 49.2px 49.2px 0 rgba(255,255,255,0.10), inset 49.2px -49.2px 49.2px 3px rgba(165,165,165,0.10)'
+
+  const headingTextShadow = '0 0 3.39px #C76BFF, 0 0 100px #C76BFF'
+  const bgImage = '/tm.jpg'
+
+  // Responsive container style uses min() to relate to viewport/background size
+  const containerStyle = {
+    maxWidth: 'min(540px, 65vw, 95%)',
+    maxHeight: 'calc(100vh - 30px)',
+  }
+
+  const headingStyle = {
+    color: '#C76BFF',
+    textShadow: headingTextShadow,
+    fontSize: 'clamp(20px, 4.5vw, 48px)',
+    lineHeight: 1,
+  }
+
+  const labelStyle = {
+    fontSize: 'clamp(12px, 1.6vw, 16px)',
+    textShadow: '0 0 5px #8B9DF8',
+  }
+
+  const inputHeight = {
+    height: 'clamp(40px, 3.6vh, 46px)',
+  }
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-[url('/RecruitmentBg.png')] bg-cover bg-[position:center_1px] bg-no-repeat px-2 sm:px-6">
-      {showConfetti && (
-        <Confetti
-          width={typeof window !== "undefined" ? window.innerWidth : 300}
-          height={typeof window !== "undefined" ? window.innerHeight : 300}
-          recycle={false}
-          numberOfPieces={400}
-        />
-      )}
-      <img
-        src="/CodingNinjas.png"
-        alt="Logo"
-        className="absolute top-4 left-4 h-auto z-20 w-[160px] sm:w-[190px] drop-shadow-xl cursor-pointer"
-        onClick={() => (window.location.href = "/")}
-      />
-      {/* Overlay for readability */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black/30 via-white/10 to-orange-100/10 z-0" />
-      <div className="relative z-10 flex flex-col items-center w-full md:max-w-xl max-w-xl px-2 sm:px-8 pt-16 pb-8">
-        {/* Banner at the top */}
-        <img
-          src="/Recruitment.png"
-          alt="Registration Banner"
-          className="w-[170px] sm:w-[210px] h-auto object-contain drop-shadow-2xl mb-[-36px]"
-        />
+    <div
+      className="relative min-h-screen w-full flex items-center justify-center px-3"
+      style={{ backgroundImage: `url('${bgImage}')`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+    >
+      <div className="absolute inset-0 bg-black/45" />
+
+      <div className="relative mx-auto w-full flex items-center justify-center" style={containerStyle}>
         {/* Card */}
-        <div className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl pt-5 pb-8 px-4 sm:px-8 w-full border border-orange-200 md:max-w-lg mx-auto">
-          <Toaster />
-          <div className="text-center mb-7">
-            <h2 className="text-orange-600 font-extrabold text-[20px] tracking-wider uppercase bungee-font drop-shadow-sm">
-              Registration Form (पंजीकरण फॉर्म)
-            </h2>
-            {/* <p className="text-xs text-gray-600 mt-1">All fields are mandatory (सभी फ़ील्ड अनिवार्य हैं)</p> */}
+        <div
+          className="w-full rounded-3xl border border-white/25 bg-purple-900/40 backdrop-blur-md shadow-2xl overflow-hidden p-5 md:p-6"
+          style={{ boxShadow: cardInsetShadows }}
+        >
+          {/* Heading + underline */}
+          <div className="text-center mb-2">
+            <h1 className="font-medium mx-auto" style={headingStyle}>
+              Registration Form
+            </h1>
+            <hr className="mx-auto w-11/12 border-t border-white/20 my-2" />
           </div>
-          <form onSubmit={handleSubmit} className="space-y-4 overflow-y-auto  sm:max-h-full">
-            {/* Name */}
-          <div>
-              <label className="text-[15px] block font-bold text-gray-800 mb-1">
-                Roll Number (रोल नंबर)
-              </label>
-              <input
-                type="text"
-                name="RollNo"
-                value={formData.RollNo}
-                onChange={handleChange}
-                className="w-full text-black border border-orange-300 focus:border-[#ee6220] outline-none px-3 py-2 rounded-lg bg-white/90 shadow-sm focus:bg-orange-50 transition"
-                required
-                placeholder="Enter your roll number (अपना रोल नंबर लिखें)"
-              />
-            </div>
-            <div>
-              <label className="text-[15px] block font-bold text-gray-800 mb-1">
-                Name (नाम)
-              </label>
-              <input
-                type="text"
-                name="Name"
-                value={formData.Name}
-                onChange={handleChange}
-                className="w-full text-black border border-orange-300 focus:border-[#ee6220] outline-none px-3 py-2 rounded-lg bg-white/90 shadow-sm focus:bg-orange-50 transition"
-                required
-                placeholder="Enter your name (अपना नाम लिखें)"
-              />
-            </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="flex flex-col items-center gap-3" aria-describedby="form-status">
             {/* Roll Number */}
-           
-            {/* Phone Number */}
-            <div>
-              <label className="text-[15px] block font-bold text-gray-800 mb-1">
-                Phone Number (फ़ोन नंबर)
-              </label>
-              <input
-                type="text"
-                name="Phone"
-                value={formData.Phone}
-                onChange={handleChange}
-                className="w-full text-black border border-orange-300 focus:border-[#ee6220] outline-none px-3 py-2 rounded-lg bg-white/90 shadow-sm focus:bg-orange-50 transition"
-                required
-                placeholder="Enter your phone number (अपना फ़ोन नंबर लिखें)"
-              />
-            </div>
-          {/* Email */}
-            <div>
-              <label className="text-[15px] block font-bold text-gray-800 mb-1">
-                Email (ईमेल)
-              </label>
-              <input
-                type="email"
-                name="Email"
-                value={formData.Email}
-                onChange={handleChange}
-                className="w-full text-black border border-orange-300 focus:border-[#ee6220] outline-none px-3 py-2 rounded-lg bg-white/90 shadow-sm focus:bg-orange-50 transition"
-                required
-                placeholder="Enter your email (अपना ईमेल लिखें)"
-              />
-            </div>
-            {/* Year and Domain in a row */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              {/* Year dropdown */}
-              <div className="flex-1">
-                <label className="text-[15px] block font-bold text-gray-800 mb-1">
-                  Year (वर्ष)
+            <div className="w-full flex justify-center">
+              <div className="w-full" style={{ maxWidth: 'min(420px, 86%)' }}>
+                <label htmlFor="rollNumber" className="text-indigo-300 font-medium block mb-1" style={labelStyle}>
+                  Roll Number
                 </label>
-                <select
-                  name="Year"
-                  value={formData.Year}
+                <input
+                  id="rollNumber"
+                  name="rollNumber"
+                  value={form.rollNumber}
                   onChange={handleChange}
-                  className="w-full text-black border border-orange-300 focus:border-[#ee6220] outline-none px-3 py-2 rounded-lg bg-white/90 shadow-sm focus:bg-orange-50 transition"
-                  required
-                >
-                  <option value="" disabled>
-                    Select your year (अपना वर्ष चुनें)
-                  </option>
-                  <option value="2nd">2nd (दूसरा)</option>
-                  <option value="3rd">3rd (तीसरा)</option>
-                </select>
-              </div>
-              {/* Domain dropdown */}
-              <div className="flex-1">
-                <label className="text-[15px] block font-bold text-gray-800 mb-1">
-                  Domain (डोमेन)
-                </label>
-                <select
-                  name="Domain"
-                  value={formData.Domain}
-                  onChange={handleChange}
-                  className="w-full text-black border border-orange-300 focus:border-[#ee6220] outline-none px-3 py-2 rounded-lg bg-white/90 shadow-sm focus:bg-orange-50 transition"
-                  required
-                >
-                  <option value="" disabled>
-                    Select your domain (अपना डोमेन चुनें)
-                  </option>
-                  <option value="Admin">Admin (प्रशासन)</option>
-                  <option value="Design & Branding">Design & Branding (डिज़ाइन और ब्रांडिंग)</option>
-                  <option value="Public Relations">Public Relations (जनसंपर्क)</option>
-                  <option value="Web Development">Web Development (वेब विकास)</option>
-                  <option value="Cyber Security">Cyber Security (साइबर सुरक्षा)</option>
-                  <option value="App Development">App Development (ऐप विकास)</option>
-                  <option value="Social">Social (सामाजिक)</option>
-                  <option value="Competitive Programming">Competitive Programming (प्रतियोगी प्रोग्रामिंग)</option>
-                  <option value="Marketing">Marketing (विपणन)</option>
-                  <option value="Machine Learning">Machine Learning (मशीन लर्निंग)</option>
-                </select>
+                  aria-invalid={!!errors.rollNumber}
+                  aria-describedby={errors.rollNumber ? 'err-rollNumber' : undefined}
+                  placeholder="Enter your roll number"
+                  className="w-full rounded-2xl border-2 border-purple-400/70 bg-purple-950/30 px-3 text-sm text-white placeholder:text-purple-300/60 focus:outline-none"
+                  style={inputHeight}
+                />
+                {errors.rollNumber && <p id="err-rollNumber" className="text-sm text-rose-300 mt-1">{errors.rollNumber}</p>}
               </div>
             </div>
-           
-            {/* GitHub URL */}
-            <div>
-              <label className="text-[15px] block font-bold text-gray-800 mb-1">
-                RESUME URL (आपका रेस्यूम यूआरएल)
-              </label>
-              <input
-                type="url"
-                name="GitHubLink"
-                value={formData.GitHubLink}
-                onChange={handleChange}
-                className="w-full text-black border border-orange-300 focus:border-[#ee6220] outline-none px-3 py-2 rounded-lg bg-white/90 shadow-sm focus:bg-orange-50 transition"
-                placeholder="Paste your GitHub profile link (अपना गिटहब लिंक पेस्ट करें)"
-              />
+
+            {/* Name */}
+            <div className="w-full flex justify-center">
+              <div className="w-full" style={{ maxWidth: 'min(420px, 86%)' }}>
+                <label htmlFor="name" className="text-indigo-300 font-medium block mb-1" style={labelStyle}>
+                  Name
+                </label>
+                <input
+                  id="name"
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  aria-invalid={!!errors.name}
+                  aria-describedby={errors.name ? 'err-name' : undefined}
+                  placeholder="Enter your name"
+                  className="w-full rounded-2xl border-2 border-purple-400/70 bg-purple-950/30 px-3 text-sm text-white placeholder:text-purple-300/60 focus:outline-none"
+                  style={inputHeight}
+                />
+                {errors.name && <p id="err-name" className="text-sm text-rose-300 mt-1">{errors.name}</p>}
+              </div>
             </div>
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full px-6 mt-6 py-3 rounded-full bg-gradient-to-r from-orange-500 to-orange-700 text-white font-bold text-base tracking-wide shadow-lg hover:from-orange-600 hover:to-orange-800 transition-all duration-200 focus:ring-2 focus:ring-orange-400 focus:outline-none cursor-pointer"
-            >
-              {isSubmitting ? "Submitting... (सबमिट हो रहा है...)" : "Submit (सबमिट करें)"}
-            </button>
+
+            {/* Phone */}
+            <div className="w-full flex justify-center">
+              <div className="w-full" style={{ maxWidth: 'min(420px, 86%)' }}>
+                <label htmlFor="phone" className="text-indigo-300 font-medium block mb-1" style={labelStyle}>
+                  Phone Number
+                </label>
+                <input
+                  id="phone"
+                  name="phone"
+                  value={form.phone}
+                  onChange={handleChange}
+                  aria-invalid={!!errors.phone}
+                  aria-describedby={errors.phone ? 'err-phone' : undefined}
+                  placeholder="Enter your phone number"
+                  className="w-full rounded-2xl border-2 border-purple-400/70 bg-purple-950/30 px-3 text-sm text-white placeholder:text-purple-300/60 focus:outline-none"
+                  style={inputHeight}
+                />
+                {errors.phone && <p id="err-phone" className="text-sm text-rose-300 mt-1">{errors.phone}</p>}
+              </div>
+            </div>
+
+            {/* Email */}
+            <div className="w-full flex justify-center">
+              <div className="w-full" style={{ maxWidth: 'min(420px, 86%)' }}>
+                <label htmlFor="email" className="text-indigo-300 font-medium block mb-1" style={labelStyle}>
+                  Email ID
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  aria-invalid={!!errors.email}
+                  aria-describedby={errors.email ? 'err-email' : undefined}
+                  placeholder="Enter your KIIT email ID"
+                  className="w-full rounded-2xl border-2 border-purple-400/70 bg-transparent px-3 text-sm text-purple-200 placeholder:text-purple-300/60 focus:outline-none"
+                  style={inputHeight}
+                />
+                {errors.email && <p id="err-email" className="text-sm text-rose-300 mt-1">{errors.email}</p>}
+              </div>
+            </div>
+
+            <div className="w-full flex flex-row flex-wrap gap-3 justify-center items-end">
+              <div className="w-1/2 min-w-[130px]" style={{ maxWidth: "min(200px, 40vw)" }}>
+                <label htmlFor="year" className="text-indigo-300 font-medium block mb-1" style={labelStyle}>
+                  Year
+                </label>
+                <div className="relative">
+                  <select
+                    id="year"
+                    name="year"
+                    value={form.year}
+                    onChange={handleChange}
+                    aria-invalid={!!errors.year}
+                    aria-describedby={errors.year ? "err-year" : undefined}
+                    className="w-full rounded-2xl border-2 border-purple-400/70 bg-purple-950/30 px-3 pr-9 text-sm text-white/40 focus:outline-none appearance-none"
+                    style={inputHeight}
+                  >
+                    <option value="" disabled>
+                      Select year
+                    </option>
+                    <option value="1st">1st</option>
+                    <option value="2nd">2nd</option>
+                  </select>
+
+                  {/* custom caret */}
+                  <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+                      <path d="M6 9l6 6 6-6" stroke="#C56BFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                </div>
+
+                {errors.year && <p id="err-year" className="text-sm text-rose-300 mt-1">{errors.year}</p>}
+              </div>
+
+              <div className="w-1/2 min-w-[160px]" style={{ maxWidth: "min(260px, 45vw)" }}>
+                <label htmlFor="domain" className="text-indigo-300 font-medium block mb-1" style={labelStyle}>
+                  Domain
+                </label>
+
+                <div className="relative">
+                  <select
+                    id="domain"
+                    name="domain"
+                    value={form.domain}
+                    onChange={handleChange}
+                    aria-invalid={!!errors.domain}
+                    aria-describedby={errors.domain ? "err-domain" : undefined}
+                    className="w-full rounded-2xl border-2 border-purple-400/70 bg-purple-950/30 px-3 pr-9 text-sm text-white/40 focus:outline-none appearance-none"
+                    style={inputHeight}
+                  >
+                    <option value="" disabled>
+                      Select domain
+                    </option>
+                    <option>Admin</option>
+                    <option>Design & Branding</option>
+                    <option>Public Relations</option>
+                    <option>Web Development</option>
+                    <option>Cyber Security</option>
+                    <option>App Development</option>
+                    <option>Social</option>
+                    <option>Competitive Programming</option>
+                    <option>Marketing</option>
+                    <option>Machine Learning</option>
+                  </select>
+
+                  {/* custom caret */}
+                  <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+                      <path d="M6 9l6 6 6-6" stroke="#C56BFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                </div>
+
+                {errors.domain && <p id="err-domain" className="text-sm text-rose-300 mt-1">{errors.domain}</p>}
+              </div>
+            </div>
+
+            {/* Resume URL */}
+            <div className="w-full flex justify-center">
+              <div className="w-full" style={{ maxWidth: 'min(420px, 86%)' }}>
+                <label htmlFor="resumeUrl" className="text-indigo-300 font-medium block mb-1" style={labelStyle}>
+                  Resume URL
+                </label>
+                <input
+                  id="resumeUrl"
+                  name="resumeUrl"
+                  type="url"
+                  value={form.resumeUrl}
+                  onChange={handleChange}
+                  placeholder="Paste link to your GitHub profile / resume"
+                  className="w-full rounded-2xl border-2 border-purple-400/70 bg-purple-950/30 px-3 text-sm text-white placeholder:text-purple-300/60 focus:outline-none"
+                  style={inputHeight}
+                />
+              </div>
+            </div>
+
+            {/* Submit */}
+            <div className="w-full flex justify-center mt-2">
+              <button
+                type="submit"
+                disabled={status === 'loading'}
+                className="w-full max-w-[220px] rounded-full text-white border-2 border-green-300  font-semibold px-4"
+                style={{ height: 'clamp(42px, 4.2vh, 54px)', background: 'linear-gradient(90deg, #229200 0%, #19b226 100%)', boxShadow: '0 8px 20px rgba(0,0,0,0.25)' }}
+              >
+                {status === 'loading' ? 'Submitting…' : 'Submit'}
+              </button>
+            </div>
+
+            {/* aria-live status */}
+            <div id="form-status" tabIndex={-1} ref={statusRef} aria-live="polite" className="w-full text-center mt-2">
+              {status === 'success' && <p className="text-green-300">Successfully submitted — thank you!</p>}
+              {status === 'error' && <p className="text-rose-300">Please fix the errors above and try again.</p>}
+            </div>
           </form>
         </div>
       </div>
     </div>
-  );
-};
-
-export default RegistrationForm;
+  )
+}
