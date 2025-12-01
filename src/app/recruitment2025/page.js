@@ -12,7 +12,7 @@ export default function RegisterOverlay({ onSubmit }) {
     resumeUrl: "",
   })
   const [errors, setErrors] = useState({})
-  const [status, setStatus] = useState(null) // null | "loading" | "success" | "error"
+  const [status, setStatus] = useState(null) 
   const statusRef = useRef(null)
 
   const validateEmail = (v) => /^\S+@\S+\.\S+$/.test(String(v).trim())
@@ -50,24 +50,81 @@ export default function RegisterOverlay({ onSubmit }) {
 
     setStatus("loading")
     try {
-      if (typeof onSubmit === "function") {
-        const result = await onSubmit({ ...form })
-        if (result && result.ok === false) {
-          setStatus("error")
-        } else {
-          setStatus("success")
-          setForm({
-            rollNumber: "",
-            name: "",
-            phone: "",
-            email: "",
-            year: "",
-            domain: "",
-            resumeUrl: "",
+      // Google Apps Script Web App URL for info extraction
+      const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyMvx6BiFaiAXbx8kT3wByykPRH90_e9T9kJaQbW5PxJie7OdJtfSUrAscJoA4DIZeQUQ/exec"
+      
+      const params = new URLSearchParams({
+        rollNumber: form.rollNumber,
+        name: form.name,
+        phone: form.phone,
+        email: form.email,
+        year: form.year,
+        domain: form.domain,
+        resumeUrl: form.resumeUrl || "",
+        timestamp: new Date().toISOString()
+      })
+
+      const submitForm = () => {
+        return new Promise((resolve) => {
+          const iframe = document.createElement('iframe')
+          iframe.style.display = 'none'
+          iframe.name = 'script-frame'
+          
+          iframe.onload = () => {
+            setTimeout(() => {
+              if (document.body.contains(iframe)) {
+                document.body.removeChild(iframe)
+              }
+              resolve(true)
+            }, 1500)
+          }
+          
+          iframe.onerror = () => {
+            setTimeout(() => {
+              if (document.body.contains(iframe)) {
+                document.body.removeChild(iframe)
+              }
+              resolve(false)
+            }, 1500)
+          }
+          
+          document.body.appendChild(iframe)
+          
+          const formElement = document.createElement('form')
+          formElement.action = SCRIPT_URL
+          formElement.method = 'POST'
+          formElement.target = 'script-frame'
+          formElement.style.display = 'none'
+          
+          
+          Object.entries(form).forEach(([key, value]) => {
+            const input = document.createElement('input')
+            input.type = 'hidden'
+            input.name = key
+            input.value = value || ""
+            formElement.appendChild(input)
           })
-        }
-      } else {
-        await new Promise((r) => setTimeout(r, 600))
+          
+          const timestampInput = document.createElement('input')
+          timestampInput.type = 'hidden'
+          timestampInput.name = 'timestamp'
+          timestampInput.value = new Date().toISOString()
+          formElement.appendChild(timestampInput)
+          
+          document.body.appendChild(formElement)
+          formElement.submit()
+          
+          setTimeout(() => {
+            if (document.body.contains(formElement)) {
+              document.body.removeChild(formElement)
+            }
+          }, 100)
+        })
+      }
+
+      const success = await submitForm()
+      
+      if (success) {
         setStatus("success")
         setForm({
           rollNumber: "",
@@ -78,7 +135,10 @@ export default function RegisterOverlay({ onSubmit }) {
           domain: "",
           resumeUrl: "",
         })
+      } else {
+        setStatus("error")
       }
+      
     } catch (err) {
       console.error(err)
       setStatus("error")
@@ -318,7 +378,7 @@ export default function RegisterOverlay({ onSubmit }) {
                       </option>
                       <option value="1st">1st</option>
                       <option value="2nd">2nd</option>
-                    </select>
+                     </select>
 
                     <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
                       <svg
